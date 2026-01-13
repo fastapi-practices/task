@@ -20,8 +20,6 @@ def get_broker() -> AsyncBroker:
     broker = AioPikaBroker(rabbitmq_url).with_result_backend(result_backend)
 
     if broker_type == 'redis':
-        redis_url = f'redis://:{urllib.parse.quote(settings.REDIS_PASSWORD)}@{settings.REDIS_HOST}:{settings.REDIS_PORT}/{settings.CELERY_BROKER_REDIS_DATABASE}'
-        result_backend = RedisAsyncResultBackend(redis_url)
         broker = ListQueueBroker(redis_url).with_result_backend(result_backend)
 
     return broker

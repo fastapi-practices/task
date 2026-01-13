@@ -9,7 +9,7 @@ from backend.plugin.task.broker import taskiq_broker
 def taskiq_demo() -> str:
     """示例任务，模拟耗时操作"""
     sleep(30)
-    return 'test async'
+    return 'test sync'
 
 
 @taskiq_broker.task(task_name='taskiq_demo_async')

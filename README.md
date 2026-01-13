@@ -34,15 +34,17 @@ from backend.plugin.task.broker import taskiq_broker
 
 
 async def register_init(app):
-    await taskiq_broker.startup()
+    if not taskiq_broker.is_worker_process:
+        await taskiq_broker.startup()
     yield
-    await taskiq_broker.shutdown()
+    if not taskiq_broker.is_worker_process:
+        await taskiq_broker.shutdown()
 ```
 
 ### 2. 启动 Worker
 
 ```bash
-taskiq worker backend.plugin.task.broker:taskiq_broker -fsd
+taskiq worker backend.plugin.task.broker:taskiq_broker -d backend.plugin.task
 ```
 
 ## 定时任务
@@ -50,7 +52,7 @@ taskiq worker backend.plugin.task.broker:taskiq_broker -fsd
 ### 启动定时任务调度器（可选）
 
 ```bash
-taskiq scheduler backend.plugin.task.scheduler:taskiq_scheduler -fsd
+taskiq scheduler backend.plugin.task.scheduler:taskiq_scheduler -d backend.plugin.task.tasks.beat
 ```
 
 在 `backend/plugin/task/tasks/beat.py` 中定义定时任务：
