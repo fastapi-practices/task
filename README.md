@@ -44,7 +44,7 @@ async def register_init(app):
 ### 2. 启动 Worker
 
 ```bash
-taskiq worker backend.plugin.task.broker:taskiq_broker -d backend.plugin.task
+taskiq worker backend.plugin.task.broker:taskiq_broker backend.plugin.task.tasks.beat -fsd -tp backend/plugin/task/**/tasks.py
 ```
 
 ## 定时任务
@@ -52,13 +52,5 @@ taskiq worker backend.plugin.task.broker:taskiq_broker -d backend.plugin.task
 ### 启动定时任务调度器（可选）
 
 ```bash
-taskiq scheduler backend.plugin.task.scheduler:taskiq_scheduler -d backend.plugin.task.tasks.beat
-```
-
-在 `backend/plugin/task/tasks/beat.py` 中定义定时任务：
-
-```python
-@taskiq_broker.task(task_name='my_task', schedule=[{'cron': '*/5 * * * *'}])
-async def my_task() -> str:
-    return 'done'
+taskiq scheduler backend.plugin.task.scheduler:taskiq_scheduler backend.plugin.task.tasks.beat
 ```

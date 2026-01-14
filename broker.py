@@ -16,7 +16,7 @@ def get_broker() -> AsyncBroker:
 
     rabbitmq_url = f'amqp://{settings.CELERY_RABBITMQ_USERNAME}:{urllib.parse.quote(settings.CELERY_RABBITMQ_PASSWORD)}@{settings.CELERY_RABBITMQ_HOST}:{settings.CELERY_RABBITMQ_PORT}/{settings.CELERY_RABBITMQ_VHOST}'
     redis_url = f'redis://:{urllib.parse.quote(settings.REDIS_PASSWORD)}@{settings.REDIS_HOST}:{settings.REDIS_PORT}/{settings.CELERY_BROKER_REDIS_DATABASE}'
-    result_backend = RedisAsyncResultBackend(redis_url)
+    result_backend = RedisAsyncResultBackend(redis_url, prefix_str='taskiq')
     broker = AioPikaBroker(rabbitmq_url).with_result_backend(result_backend)
 
     if broker_type == 'redis':

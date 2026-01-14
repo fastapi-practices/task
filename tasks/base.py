@@ -8,7 +8,7 @@ from backend.common.socketio.actions import task_notification
 class TaskBaseMiddleware(TaskiqMiddleware):
     """Taskiq 任务中间件"""
 
-    async def pre_execute(self, message: 'TaskiqMessage') -> None:
+    async def pre_execute(self, message: 'TaskiqMessage') -> TaskiqMessage:
         """
         任务开始前执行
 
@@ -16,6 +16,7 @@ class TaskBaseMiddleware(TaskiqMiddleware):
         :return:
         """
         await task_notification(msg=f'任务 {message.task_name}（{message.task_id}）开始执行')
+        return message
 
     async def post_execute(self, message: 'TaskiqMessage', result: 'TaskiqResult[Any]') -> None:
         """

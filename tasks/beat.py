@@ -9,7 +9,7 @@ from backend.plugin.task.broker import taskiq_broker
 @taskiq_broker.task(
     task_name='taskiq_schedule_demo', schedule=[{'interval': '30', 'cron_offset': settings.DATETIME_TIMEZONE}]
 )
-def scheduled_demo() -> str:
+def taskiq_schedule_demo() -> str:
     """定时同步任务，每30秒执行一次"""
     sleep(0.001)
     return 'test sync'
@@ -19,7 +19,7 @@ def scheduled_demo() -> str:
     task_name='taskiq_schedule_demo_async',
     schedule=[{'cron': '*/1 * * * *', 'cron_offset': settings.DATETIME_TIMEZONE}],
 )
-async def scheduled_demo_async() -> str:
+async def taskiq_schedule_demo_async() -> str:
     """定时异步任务，每分钟执行一次"""
     await asleep(0.001)
     return 'test async'
@@ -36,7 +36,7 @@ async def scheduled_demo_async() -> str:
         }
     ],
 )
-async def scheduled_demo_params(hello: str, world: str | None = None) -> str:
+async def taskiq_schedule_demo_params(hello: str, world: str | None = None) -> str:
     """定时参数任务，每分钟执行一次"""
     await asleep(0.001)
     return hello + (world or '')

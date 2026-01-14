@@ -18,7 +18,6 @@ class TaskStatusSchema(SchemaBase):
     """任务状态"""
 
     task_id: str = Field(..., description='任务 ID')
-    is_ready: bool = Field(..., description='是否完成')
     is_error: bool = Field(..., description='是否出错')
     result: Any | None = Field(None, description='任务结果')
     error: str | None = Field(None, description='错误信息')
