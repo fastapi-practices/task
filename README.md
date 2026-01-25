@@ -1,10 +1,10 @@
-# 任务插件
+# Task
 
-基于 [taskiq](https://github.com/taskiq-python/taskiq) 的异步任务队列
+基于 [taskiq](https://github.com/taskiq-python/taskiq) 的异步任务队列插件
 
-## 配置
+## 全局配置
 
-插件自动读取项目配置，优先使用 `TASKIQ_BROKER`，否则使用 `CELERY_BROKER`：
+插件自动读取项目原始配置，优先使用 `TASKIQ_BROKER`，否则使用 `CELERY_BROKER`：
 
 ```python
 # Redis
