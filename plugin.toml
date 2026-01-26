@@ -4,7 +4,7 @@ version = '0.0.1'
 description = '基于 taskiq 的异步任务队列插件'
 author = 'wu-clan'
 tags = ['task']
-database = ['mysql', 'pgsql']
+database = ['mysql', 'postgresql']
 
 [app]
 router = ['v1']
