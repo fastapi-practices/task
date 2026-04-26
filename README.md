@@ -1,10 +1,14 @@
 # Task
 
-基于 [taskiq](https://github.com/taskiq-python/taskiq) 的异步任务队列插件
+基于 [taskiq](https://github.com/taskiq-python/taskiq) 的异步任务队列插件，支持 Worker 和定时任务调度器
 
-## 全局配置
+## 插件类型
 
-插件自动读取项目原始配置，优先使用 `TASKIQ_BROKER`，否则使用 `CELERY_BROKER`：
+- 应用级插件
+
+## 配置说明
+
+插件自动读取项目原始任务队列配置，优先使用 `TASKIQ_BROKER`，否则使用 `CELERY_BROKER`
 
 ```python
 # Redis
@@ -23,34 +27,29 @@ CELERY_RABBITMQ_PASSWORD = 'guest'
 CELERY_RABBITMQ_VHOST = '/'
 ```
 
-## 快速开始
+## 使用方式
 
-### 1. 集成生命周期
+1. 安装并启用插件后，重启后端服务
+2. 自 fba v1.13.3 起，插件安装后会自动应用；旧版本需手动将 `hooks.py` 中的 lifespan 添加到
+   `backend/core/registrar.py::register_init` 中
+3. 使用以下命令启动 Worker：
 
-在 `backend/core/registrar.py` 的 `register_init` 函数中添加：
+    ```bash
+    taskiq worker backend.plugin.task.broker:taskiq_broker backend.plugin.task.tasks.beat -fsd -tp backend/plugin/task/**/tasks.py
+    ```
 
-```python
-from backend.plugin.task.broker import taskiq_broker
+4. 如需定时任务，使用以下命令启动调度器：
 
+    ```bash
+    taskiq scheduler backend.plugin.task.scheduler:taskiq_scheduler backend.plugin.task.tasks.beat
+    ```
 
-async def register_init(app):
-    if not taskiq_broker.is_worker_process:
-        await taskiq_broker.startup()
-    yield
-    if not taskiq_broker.is_worker_process:
-        await taskiq_broker.shutdown()
-```
+## 卸载说明
 
-### 2. 启动 Worker
+- 卸载插件前，先停止 Worker 和 Scheduler
+- 卸载插件后，清理业务中的任务调用和队列配置
 
-```bash
-taskiq worker backend.plugin.task.broker:taskiq_broker backend.plugin.task.tasks.beat -fsd -tp backend/plugin/task/**/tasks.py
-```
+## 联系方式
 
-## 定时任务
-
-### 启动定时任务调度器（可选）
-
-```bash
-taskiq scheduler backend.plugin.task.scheduler:taskiq_scheduler backend.plugin.task.tasks.beat
-```
+- 作者：`wu-clan`
+- 反馈方式：提交 Issue 或 PR
