@@ -27,6 +27,25 @@ CELERY_RABBITMQ_PASSWORD = 'guest'
 CELERY_RABBITMQ_VHOST = '/'
 ```
 
+插件目录下 `plugin.toml` 的 `[settings]` 中包含以下内容：
+
+```toml
+[settings]
+GRAFANA_TASKIQ_PROMETHEUS_SERVER_ADDR = '0.0.0.0'
+GRAFANA_TASKIQ_PROMETHEUS_SERVER_PORT = 9000
+```
+
+在 `backend/core/conf.py` 中保留插件配置声明：
+
+```python
+##################################################
+# [ Plugin ] task
+##################################################
+# 基础配置（in plugin.toml）
+GRAFANA_TASKIQ_PROMETHEUS_SERVER_ADDR: str
+GRAFANA_TASKIQ_PROMETHEUS_SERVER_PORT: int
+```
+
 ## 使用方式
 
 1. 安装并启用插件后，重启后端服务

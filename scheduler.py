@@ -13,4 +13,5 @@ def get_scheduler() -> TaskiqScheduler:
     return scheduler
 
 
+# 创建 Taskiq 调度器单例
 taskiq_scheduler = get_scheduler()

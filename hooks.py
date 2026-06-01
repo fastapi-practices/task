@@ -4,6 +4,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from backend.plugin.task.broker import taskiq_broker
+from backend.plugin.task.otel import init_taskiq_tracing
+
+
+def otel(_app: FastAPI) -> None:
+    """Taskiq OpenTelemetry"""
+    init_taskiq_tracing()
 
 
 @asynccontextmanager
@@ -12,7 +18,8 @@ async def lifespan(_app: FastAPI) -> AsyncGenerator[None]:
     if not taskiq_broker.is_worker_process:
         await taskiq_broker.startup()
 
-    yield
-
-    if not taskiq_broker.is_worker_process:
-        await taskiq_broker.shutdown()
+    try:
+        yield
+    finally:
+        if not taskiq_broker.is_worker_process:
+            await taskiq_broker.shutdown()
