@@ -27,6 +27,11 @@ GRAFANA_TASKIQ_PROMETHEUS_SERVER_ADDR: str
 GRAFANA_TASKIQ_PROMETHEUS_SERVER_PORT: int
 ```
 
+## 配置项说明
+
+- `GRAFANA_TASKIQ_PROMETHEUS_SERVER_ADDR`：控制 Prometheus 指标服务的监听地址
+- `GRAFANA_TASKIQ_PROMETHEUS_SERVER_PORT`：控制 Prometheus 指标服务的监听端口
+
 ## 使用方式
 
 1. 安装并启用插件后，重启后端服务
