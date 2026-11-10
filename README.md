@@ -8,25 +8,6 @@
 
 ## 配置说明
 
-插件自动读取项目原始任务队列配置，优先使用 `TASKIQ_BROKER`，否则使用 `CELERY_BROKER`
-
-```python
-# Redis
-TASKIQ_BROKER = 'redis'  # 或 CELERY_BROKER
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
-REDIS_PASSWORD = ''
-CELERY_BROKER_REDIS_DATABASE = 0
-
-# RabbitMQ
-TASKIQ_BROKER = 'rabbitmq'  # 或 CELERY_BROKER
-CELERY_RABBITMQ_HOST = 'localhost'
-CELERY_RABBITMQ_PORT = 5672
-CELERY_RABBITMQ_USERNAME = 'guest'
-CELERY_RABBITMQ_PASSWORD = 'guest'
-CELERY_RABBITMQ_VHOST = '/'
-```
-
 插件目录下 `plugin.toml` 的 `[settings]` 中包含以下内容：
 
 ```toml
@@ -35,7 +16,7 @@ GRAFANA_TASKIQ_PROMETHEUS_SERVER_ADDR = '0.0.0.0'
 GRAFANA_TASKIQ_PROMETHEUS_SERVER_PORT = 9000
 ```
 
-在 `backend/core/conf.py` 中保留插件配置声明：
+在 `backend/core/conf.py` 中添加以下内容：
 
 ```python
 ##################################################
@@ -49,15 +30,16 @@ GRAFANA_TASKIQ_PROMETHEUS_SERVER_PORT: int
 ## 使用方式
 
 1. 安装并启用插件后，重启后端服务
-2. 自 fba v1.13.3 起，插件安装后会自动应用；旧版本需手动将 `hooks.py` 中的 lifespan 添加到
+2. 插件自动读取项目原始任务队列配置，优先使用 `TASKIQ_BROKER`，否则使用 `CELERY_BROKER`
+3. 自 fba v1.13.3 起，插件安装后会自动应用；旧版本需手动将 `hooks.py` 中的 lifespan 添加到
    `backend/core/registrar.py::register_init` 中
-3. 使用以下命令启动 Worker：
+4. 使用以下命令启动 Worker：
 
     ```bash
     taskiq worker backend.plugin.task.broker:taskiq_broker backend.plugin.task.tasks.beat -fsd -tp backend/plugin/task/**/tasks.py
     ```
 
-4. 如需定时任务，使用以下命令启动调度器：
+5. 如需定时任务，使用以下命令启动调度器：
 
     ```bash
     taskiq scheduler backend.plugin.task.scheduler:taskiq_scheduler backend.plugin.task.tasks.beat

@@ -5,7 +5,6 @@ fba_version = "~=1.17"
 description = '基于 taskiq 的异步任务队列插件'
 author = 'wu-clan'
 tags = ['task']
-database = ['mysql', 'postgresql']
 
 [app]
 router = ['v1']
